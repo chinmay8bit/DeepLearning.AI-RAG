@@ -6,7 +6,6 @@ import utils
 data = utils.read_dataframe("news_data_dedup.csv")
 
 
-
 def test_bm25_retrieve(learner_func):
     def g():
         cases = []
@@ -21,7 +20,7 @@ def test_bm25_retrieve(learner_func):
 
         top_k = 3
         test_query = "Should I invest in startups?"
-        
+
         top_k_indices = learner_func(test_query, top_k)
 
         t = test_case()
@@ -52,7 +51,7 @@ def test_bm25_retrieve(learner_func):
 
         top_k = 10
         test_query = "Should I invest in startups?"
-        
+
         top_k_indices = learner_func(test_query, top_k)
 
         t = test_case()
@@ -76,11 +75,12 @@ def test_bm25_retrieve(learner_func):
     cases = g()
     print_feedback(cases)
 
+
 def test_semantic_search_retrieve(learner_func, EMBEDDING):
     def g():
         cases = []
         func_name = learner_func.__name__
-    
+
         t = test_case()
         if not isinstance(learner_func, FunctionType):
             t.failed = True
@@ -91,7 +91,7 @@ def test_semantic_search_retrieve(learner_func, EMBEDDING):
 
         top_k = 3
         test_query = "Should I invest in startups?"
-        
+
         top_k_indices = learner_func(test_query, top_k)
 
         t = test_case()
@@ -122,7 +122,7 @@ def test_semantic_search_retrieve(learner_func, EMBEDDING):
 
         top_k = 10
         test_query = "Should I invest in startups?"
-        
+
         top_k_indices = learner_func(test_query, top_k)
 
         t = test_case()
@@ -147,8 +147,6 @@ def test_semantic_search_retrieve(learner_func, EMBEDDING):
     print_feedback(cases)
 
 
-
-
 def test_reciprocal_rank_fusion(learner_func):
     def g():
         cases = []
@@ -164,7 +162,7 @@ def test_reciprocal_rank_fusion(learner_func):
         top_k = 10
         l1 = [17, 29, 28, 26, 18, 14, 1, 0, 16, 11]
         l2 = [17, 26, 16, 25, 18, 24, 13, 11, 6, 12]
-        
+
         top_k_indices = learner_func(l1, l2, top_k)
 
         t = test_case()
@@ -195,7 +193,7 @@ def test_reciprocal_rank_fusion(learner_func):
 
         top_k = 4
         test_query = "Should I invest in startups?"
-        
+
         top_k_indices = learner_func(l1, l2, top_k)
 
         t = test_case()
@@ -220,7 +218,6 @@ def test_reciprocal_rank_fusion(learner_func):
     print_feedback(cases)
 
 
-
 def exercise_5(learner_func):
     def g():
         cases = []
@@ -233,9 +230,9 @@ def exercise_5(learner_func):
             t.got = type(learner_func)
             return [t]
 
-        l1 = [1,2,4]
-        l2 = [1,2,3,4]
-        
+        l1 = [1, 2, 4]
+        l2 = [1, 2, 3, 4]
+
         recall_score = learner_func(l1, l2)
 
         t = test_case()
@@ -245,7 +242,6 @@ def exercise_5(learner_func):
             t.want = float
             t.got = type(recall_score)
             return [t]
-
 
         t = test_case()
         if recall_score != 0.75:
@@ -255,9 +251,9 @@ def exercise_5(learner_func):
             t.got = recall_score
         cases.append(t)
 
-        l1 = [1,2,3,4,5]
-        l2 = [1,2,3,4,5]
-        
+        l1 = [1, 2, 3, 4, 5]
+        l2 = [1, 2, 3, 4, 5]
+
         recall_score = learner_func(l1, l2)
 
         t = test_case()
@@ -268,12 +264,11 @@ def exercise_5(learner_func):
             t.got = type(recall_score)
             return [t]
 
-
         t = test_case()
-        if recall_score != 1.:
+        if recall_score != 1.0:
             t.failed = True
             t.msg = "Incorrect recall for sample list"
-            t.want = 1.
+            t.want = 1.0
             t.got = recall_score
         cases.append(t)
 

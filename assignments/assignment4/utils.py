@@ -16,6 +16,14 @@ import subprocess
 import httpx
 from openai import OpenAI, DefaultHttpxClient
 from together import Together
+import torch
+from sentence_transformers import SentenceTransformer
+
+# Detect device
+if torch.cuda.is_available():
+    device = "cuda"
+else:
+    device = "cpu"
 
 # Custom transport to bypass SSL verification
 transport = httpx.HTTPTransport(local_address="0.0.0.0", verify=False)
@@ -165,9 +173,19 @@ def generate_params_dict(
     return kwargs
 
 
+EMBEDDING_MODELS = {
+    "BAAI/bge-base-en-v1.5": SentenceTransformer(
+        "BAAI/bge-base-en-v1.5", device=device
+    ),
+}
+
+
 def generate_embedding(
     prompt: str, model: str = "BAAI/bge-base-en-v1.5", together_api_key=None, **kwargs
 ):
+    # Not sure why its calling together api, we can do this locally instead
+    if model in EMBEDDING_MODELS:
+        return EMBEDDING_MODELS[model].encode(prompt, batch_size=1024).tolist()
     payload = {"model": model, "input": prompt, **kwargs}
     if (not together_api_key) and ("TOGETHER_API_KEY" not in os.environ):
         client = OpenAI(

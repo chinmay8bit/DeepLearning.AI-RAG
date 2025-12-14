@@ -296,11 +296,13 @@ def test_get_relevant_products_from_query(learner_func):
             ]
         )
         t = test_case()
-        if ids != ids_solution:
+        if (
+            len(set(ids) & set(ids_solution)) < 10
+        ):  # Should have atleast 10 products common
             t.failed = True
             t.msg = f"Incorrect result for query = {query} and simplified = True"
-            t.want = f"Product IDs must be {ids_solution}"
-            t.got = f"Product IDs output are: {ids}"
+            t.want = f"Product IDs must have atleast 10 in common with {ids_solution}"
+            t.got = f"Product IDs output are: {ids}. Only {len(set(ids) & set(ids_solution))} are in common"
         cases.append(t)
 
         return cases

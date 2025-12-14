@@ -9,7 +9,7 @@ import logging
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 # Initialize models globally to load them once
-model_name = "models/BAAI/bge-base-en-v1.5"
+model_name = "BAAI/bge-base-en-v1.5"
 model = SentenceTransformer(model_name).to(
     device
 )  # Ensure "cuda" is available, otherwise use "cpu"
